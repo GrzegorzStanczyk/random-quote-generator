@@ -48,8 +48,8 @@
   let loadStuff = (data) => {
 
       let citeContent = JSON.stringify(data[0].content)
-                            .replace(/<[^>]*>|\\n/g,"")
-                            .replace(/&#8217;/g,"'");  
+                            .replace(/<[^>]*>|\\n|;/g,"")
+                            .replace(/&#8217|&#8221|&#8220/g,"'");
 
       cite.innerHTML = citeContent;
 
