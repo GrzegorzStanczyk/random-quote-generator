@@ -6,12 +6,14 @@
   let author = document.querySelector("span");
   let cite = document.querySelector("p"); 
   let tweetlet = document.querySelector("#tweet");
+  let head = document.head;
 
 
   var jsonp = {
       callbackCounter: 0,
 
       fetch: function(url, callback) {
+          
           var fn = 'JSONPCallback_' + this.callbackCounter++;
           window[fn] = this.evalJSONP(callback);
           url = url.replace('=JSONPCallback', '=' + fn);
@@ -19,7 +21,7 @@
           var scriptTag = document.createElement('SCRIPT');
           scriptTag.src = url;
           document.getElementsByTagName('HEAD')[0].appendChild(scriptTag);
-        console.log(callback)
+          head.removeChild(scriptTag);
       },
 
       evalJSONP: function(callback) {
@@ -64,11 +66,11 @@
   };
 
   document.querySelector("#loadData").onclick = () => {
-
+      
       quoteContainer.removeChild(cite);
-      quoteContainer.removeChild(author);    
+      quoteContainer.removeChild(author);
 
-    jsonp.fetch(quotes, loadStuff);
+        jsonp.fetch(quotes, loadStuff);
   };
 
   jsonp.fetch(quotes, loadStuff);
