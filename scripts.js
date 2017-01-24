@@ -2,11 +2,12 @@
   
   let quotes = "https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&_jsonp=JSONPCallback";
   
-  let quoteContainer = document.querySelector("#quote");
-  let author = document.querySelector("span");
-  let cite = document.querySelector("p"); 
-  let tweetlet = document.querySelector("#tweet");
-  let head = document.head;
+  let quoteContainer = document.querySelector("#quote"),
+      author = document.querySelector("span"),
+      cite = document.querySelector("p"),
+      // tweet = document.querySelector("#tweet"),
+      head = document.head,
+      frag = document.createDocumentFragment();
 
 
   var jsonp = {
@@ -50,19 +51,22 @@
       let citeContent = JSON.stringify(data[0].content)
                             .replace(/<[^>]*>|\\n|;/g,"")
                             .replace(/&#8217|&#8221|&#8220/g,"'");
-
-      cite.innerHTML = citeContent;
-
+      cite.textContent = citeContent;
+      frag.appendChild(cite);
+    
       let citeAuthor = JSON.stringify(data[0].title)
                            .replace(/"/g,"");
-
       author.textContent = citeAuthor;
-
-      quoteContainer.appendChild(cite);
-      quoteContainer.appendChild(author);   
-
-      tweet.href = `https://twitter.com/intent/tweet?text=${citeContent} ${citeAuthor}`;
-
+      frag.appendChild(author);
+    
+      quoteContainer.appendChild(frag);
+    
+      loadTwitter(citeContent, citeAuthor);
+    
+  };
+  
+  let loadTwitter = (citeContent, citeAuthor) => {
+    tweet.href = `https://twitter.com/intent/tweet?text=${citeContent} ${citeAuthor}`;
   };
 
   document.querySelector("#loadData").onclick = () => {
